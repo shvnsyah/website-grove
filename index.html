@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Warung Grove</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Hubungkan ke CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Warung GROVE🔥</h1>
+
+<div class="menu">
+
+  <div class="card">
+    <img src="asset/WhatsApp Image 2026-04-23 at 23.21.59.jpeg">
+    <h3>Hummer Melon</h3>
+    <p>Rp1.000</p>
+    <button onclick="tambah('Hummer Melon',1000)">Tambah</button>
+  </div>
+
+  <div class="card">
+    <img src="asset/WhatsApp Image 2026-04-23 at 23.22.00.jpeg">
+    <h3>Es Teh</h3>
+    <p>Rp1.000</p>
+    <button onclick="tambah('Es Teh',1000)">Tambah</button>
+  </div>
+
+  <div class="card">
+    <img src="asset/360_F_616638761_ePK1FxzEFNwbGeZc7Hw5rp7cbnzVrVv6.jpg">
+    <h3>Wifi </h3>
+    <p>Rp3.000</p>
+    <button onclick="tambah('wifi',3000)">Tambah</button>
+  </div>
+
+
+</div>
+
+<div class="keranjang">
+  <h2>Keranjang 🛒</h2>
+  <ul id="keranjang"></ul>
+  <p>Total: Rp <span id="total">0</span></p>
+  <button onclick="pesanWA()">Pesan Sekarang</button>
+</div>
+
+<script>
+let keranjang = [];
+
+function tambah(nama, harga){
+  let item = keranjang.find(i => i.nama === nama);
+
+  if(item){
+    item.qty++;
+  } else {
+    keranjang.push({nama, harga, qty: 1});
+  }
+
+  render();
+}
+
+function hapus(index){
+  keranjang.splice(index,1);
+  render();
+}
+
+function render(){
+  let list = document.getElementById("keranjang");
+  let total = 0;
+
+  list.innerHTML = "";
+
+  keranjang.forEach((item, index) => {
+    let li = document.createElement("li");
+    li.innerHTML = `
+      ${item.nama} (${item.qty}x) - Rp${item.harga * item.qty}
+      <button onclick="hapus(${index})">❌</button>
+    `;
+    list.appendChild(li);
+
+    total += item.harga * item.qty;
+  });
+
+  document.getElementById("total").innerText = total;
+}
+
+function pesanWA(){
+  let nomor = "6288218133909"; // ganti nomor kamu
+  
+  let text = "Halo, saya ingin pesan:\n";
+
+  keranjang.forEach((item, index) => {
+    text += `${index+1}. ${item.nama} (${item.qty}x) - Rp${item.harga * item.qty}\n`;
+  });
+
+  let total = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+
+  text += "\nTotal: Rp" + total;
+
+  let url = "https://wa.me/" + nomor + "?text=" + encodeURIComponent(text);
+  
+  window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>
